@@ -1,36 +1,71 @@
-"use client"
+"use client";
 
 import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { LogInIcon, LogOutIcon } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Link from "next/link";
 
-export default function Header(){
-    const session = useSession();
-    console.log(session);
-    const image:string = session.data?.user?.image!;
-    return (
-        <header className="flex justify-between p-3">
-            <div className="font-sans text-3xl font-medium">
-                devfinder
-            </div>
-            <div className="flex">
-                <div className="mr-3">
-                {session.data ? (
-                
-                   
-                <Button onClick={() => signOut()}>
-                    Sign Out
-                </Button>
-            ): (
-                <Button  onClick={() => signIn("google")}>
-                    Sign In
-                </Button>
-            
-            )}
-            </div>
-                <ModeToggle/>
-            </div>
-        </header>
-    )
+function AccountDropdown() {
+  const session = useSession();
+  const isLoggedIn = !!session.data;
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost">
+          {session?.data ? (
+            <Avatar className="mr-2">
+              <AvatarImage src={session?.data?.user?.image ?? ""} height={40} width={40}/>
+              <AvatarFallback>{session?.data?.user?.name![0]}</AvatarFallback>
+            </Avatar>
+          ) : (
+            <></>
+          )}
+
+          {session?.data?.user?.name || "Account"}
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        {isLoggedIn ? (
+          <DropdownMenuItem onClick={() => signOut()}>
+            <LogOutIcon className="mr-2" /> Sign Out
+          </DropdownMenuItem>
+        ) : (
+          <DropdownMenuItem onClick={() => signIn("google")}>
+            <LogInIcon className="mr-2" /> Sign In
+          </DropdownMenuItem>
+        )}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+export default function Header() {
+  const session = useSession();
+  return (
+    <header className="py-2 container mx-auto">
+      <div className="flex justify-between items-center">
+        <Link
+          href="/"
+          className="font-sans text-3xl font-medium hover:underline "
+        >
+          devfinder
+        </Link>
+        <div className="flex items-center gap-4">
+          <AccountDropdown />
+
+          <ModeToggle />
+        </div>
+      </div>
+    </header>
+  );
 }
