@@ -15,6 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { createRoomAction } from "./actions";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/use-toast";
 const formSchema = z.object({
   name: z.string().min(1).max(50),
   description: z.string().min(1).max(100),
@@ -23,6 +24,7 @@ const formSchema = z.object({
 })
 
 export default function CreateRoomForm() {
+    const {toast} = useToast(); 
     const router = useRouter();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -35,8 +37,12 @@ export default function CreateRoomForm() {
       })
       async function onSubmit(values: z.infer<typeof formSchema>) {
         // TODO: invoke a serve action to store the data in the table room
-        await createRoomAction(values)
-        router.push("/");
+        const room = await createRoomAction(values);
+        toast({
+          title:"Room Created",
+          description: "Your room has been created successfully",
+        });
+        router.push(`/rooms/${room.id}`);
       }
     return (
         <div >

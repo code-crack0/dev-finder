@@ -11,6 +11,7 @@ export async function createRoomAction(roomData:Omit<Room,"id" | 'userId'>){
     if(!session){
         throw new Error("User not authenticated");
     }
-    await createRoom(roomData,session.user.id);
-    revalidatePath("/")
+    const room = await createRoom(roomData,session.user.id);
+    revalidatePath("/");
+    return room;
 }

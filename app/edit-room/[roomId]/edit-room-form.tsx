@@ -14,8 +14,9 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { editRoomAction } from "./actions";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Room } from "@/db/schema";
+import { useToast } from "@/components/ui/use-toast";
 const formSchema = z.object({
   name: z.string().min(1).max(50),
   description: z.string().min(1).max(100),
@@ -24,6 +25,7 @@ const formSchema = z.object({
 });
 
 export default function EditRoomForm({ room }: { room: Room }) {
+  const {toast} = useToast();
   const router = useRouter();
   const params = useParams();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -37,9 +39,14 @@ export default function EditRoomForm({ room }: { room: Room }) {
   });
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // TODO: invoke a serve action to store the data in the table room
-    await editRoomAction({
+    const room = await editRoomAction({
       ...values,
       id: params.roomId as string,
+    });
+    toast({
+      title: "Room Updated",
+      description: "Your room has been updated successfully",
+    
     });
     router.push("/browse");
   }
