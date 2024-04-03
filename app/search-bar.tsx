@@ -15,6 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { useRouter, useSearchParams } from "next/navigation";
 import { SearchIcon } from "lucide-react";
+import { useEffect } from "react";
 const formSchema = z.object({
   search: z.string().min(0).max(50),
 })
@@ -29,6 +30,10 @@ export default function SearchBar(){
           search: query.get("search") ?? "",
         },
       })
+      const search = query.get("search");
+      useEffect(()=> {
+        form.setValue("search", search ?? "");
+      },[search,form])
       async function onSubmit(values: z.infer<typeof formSchema>) {
         // TODO: invoke a serve action to store the data in the table room
         // router.push("/");

@@ -2,7 +2,8 @@ import { getRoom } from "@/app/data-access/rooms";
 import { GithubIcon } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import TagsList, { splitTags } from "@/components/tags-list";
+import TagsList from "@/components/tags-list";
+import { splitTags } from "@/lib/utils";
 import { VideoFinder } from "./video-player";
 
 export default async function RoomPage(props: { params: { roomId: string } }) {
