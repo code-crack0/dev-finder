@@ -38,9 +38,9 @@ export default function SearchBar(){
         // TODO: invoke a serve action to store the data in the table room
         // router.push("/");
         if(values.search){
-            router.push(`/?search=${values.search}`);
+            router.push(`/browse/?search=${values.search}`);
         } else {
-            router.push("/");
+            router.push("/browse");
         
         }
       }
@@ -65,7 +65,7 @@ export default function SearchBar(){
             query.get("search") && (
                 <Button variant="link" onClick={() => {
                     form.setValue("search", "");
-                    router.push("/");
+                    router.push("/browse");
                 }}>
                     Clear
                 </Button>

@@ -53,8 +53,9 @@ function AccountDropdown() {
 }
 export default function Header() {
   const session = useSession();
+  const isLoggedIn = !!session.data;
   return (
-    <header className="py-2 container mx-auto">
+    <header className="py-2 container mx-auto z-10 relative">
       <div className="flex justify-between items-center">
         <Link
           href="/"
@@ -62,6 +63,16 @@ export default function Header() {
         >
           devfinder
         </Link>
+        <nav className="flex gap-4">
+          {
+            isLoggedIn && (
+              <>
+                <Link href="/browse" className="hover:underline"> Browse</Link>
+                <Link href="/your-rooms" className="hover:underline">Your Rooms</Link>
+              </>
+            )
+          }
+        </nav>
         <div className="flex items-center gap-4">
           <AccountDropdown />
 
