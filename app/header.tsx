@@ -37,7 +37,9 @@ function AccountDropdown() {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         {isLoggedIn ? (
-          <DropdownMenuItem onClick={() => signOut()}>
+          <DropdownMenuItem onClick={() => signOut({
+            callbackUrl: "/"
+          })}>
             <LogOutIcon className="mr-2" /> Sign Out
           </DropdownMenuItem>
         ) : (
